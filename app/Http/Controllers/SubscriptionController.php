@@ -2,8 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use App\Models\Subscription;
+use App\Models\UserSubscription;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Auth;
 
 class SubscriptionController extends Controller
 {
@@ -15,6 +19,7 @@ class SubscriptionController extends Controller
     public function index()
     {
         //
+        
     }
 
     /**
@@ -47,6 +52,39 @@ class SubscriptionController extends Controller
     public function show(Subscription $subscription)
     {
         //
+        $plans = Subscription::all();
+        // dd($plans);
+        if(count($plans)==0){
+            return "No Plan exist";
+        }
+        return $plans;
+    }
+    // Function for Select and activate the Package Plan
+    public function selectPlan($id){
+        // 
+        $plan = Subscription::find($id);
+        if(!$plan){
+            return "Kindly Select the Correct Plan";
+        }
+        $expiryDateTime= " ";
+        // echo $expiryDateTime = Carbon::now()->addMonths(1200);
+        if($plan->duration==12){
+            $expiryDateTime = Carbon::now()->addMonths(12);
+        }
+        if($plan->duration==1){
+            $expiryDateTime = Carbon::now()->addMonths(1);
+        }
+        if($plan->duration==0){
+            $expiryDateTime = Carbon::now()->addMonths(1200);
+        }
+        // echo $expiryDateTime;
+        // return "yes";
+        UserSubscription::create([
+            'user_id' => Auth::id(),
+            'subscription_id' => $plan->id,
+            'expiry_date' => $expiryDateTime,
+        ]);
+        return "You have succesfully subscried to ".$plan->name." Plan";
     }
 
     /**

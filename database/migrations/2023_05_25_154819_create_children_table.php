@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateUserSubscriptionTable extends Migration
+class CreateChildrenTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,12 @@ class CreateUserSubscriptionTable extends Migration
      */
     public function up()
     {
-        Schema::create('user_subscription', function (Blueprint $table) {
+        Schema::create('children', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('user_id');
-            $table->unsignedBigInteger('subscription_id');
-            $table->dateTime('expiry_date');
+            $table->string('name');
+            $table->date('dob');
+            $table->unsignedBigInteger('image_icon_id');
+            $table->unsignedBigInteger('parent_id');
             $table->timestamps();
         });
     }
@@ -29,6 +30,6 @@ class CreateUserSubscriptionTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('user_subscription');
+        Schema::dropIfExists('children');
     }
 }
